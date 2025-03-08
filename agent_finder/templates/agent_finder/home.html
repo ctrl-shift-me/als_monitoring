@@ -1,0 +1,74 @@
+  {% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-5">
+        <div class="col-md-8 offset-md-2 text-center">
+            <h1 class="display-4">Find Kiosk Operators Near You</h1>
+            <p class="lead">Looking for Afro Lottery Systems Kiosks in your area? We'll help you find the closest ones.</p>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-5">
+                                <label for="location" class="form-label">Your Location</label>
+                                <input type="text" id="location" name="search_location" class="form-control" placeholder="Enter your address, city, or zip code" required value="{{ search_location }}">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            {% if geocoding_error %}
+            <div class="alert alert-danger mt-3">
+                <i class="bi bi-exclamation-triangle-fill"></i> We couldn't find that location. Please try entering a different address or zip code.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if search_provided %}
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <h2>
+                Kiosk Operators Near "{{ search_location }}"
+            </h2>
+            
+            {% if closest_operators %}
+                <div class="row mt-4">
+                    {% for item in closest_operators %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.operator.get_full_name }}</h5>
+                                <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.kiosk_location }}</p>
+                                <p class="text-muted"><i class="bi bi-telephone-fill"></i> {{ item.operator.phone_number }}</p>
+                                <p><strong>Distance:</strong> {{ item.distance|floatformat:1 }} km away</p>
+                            </div>
+                            {% comment %} <div class="card-footer bg-white">
+                                <a href="#" class="btn btn-primary">Contact Kiosk Operator</a>
+                                <a href="#" class="btn btn-outline-primary">View Profile</a>
+                            </div> {% endcomment %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info mt-3">
+                    <i class="bi bi-info-circle-fill"></i> No kiosk operators found in your area. Try expanding your search criteria.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

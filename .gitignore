@@ -1,0 +1,58 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+
+# Django-specific
+*.log
+db.sqlite3
+instance/
+media/
+staticfiles/
+local_settings.py
+.env
+*.env
+
+# Migrations (optional, but useful if you regenerate them often)
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# VS Code
+.vscode/
+
+# JetBrains (PyCharm, IntelliJ)
+.idea/
+
+# Node.js / frontend files
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Docker
+*.dockerfile
+docker-compose.override.yml
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Pytest / unittest
+.pytest_cache/
+.tox/
