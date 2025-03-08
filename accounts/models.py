@@ -1,9 +1,11 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
-from geopy.geocoders import Nominatim
+# from geopy.geocoders import Nominatim
+from geopy.geocoders import GoogleV3
 from geopy.exc import GeocoderTimedOut
 
 
@@ -61,6 +63,8 @@ class KioskOperatorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # Perhaps use Postgres text search to find places based on location stored
     kiosk_location = models.CharField(max_length=255)
+    # Possibly have extra details about the shop
+    # Optionally have provision for images
     kiosk_id = models.CharField(max_length=50)
     operating_hours = models.CharField(max_length=100)
     latitude = models.FloatField(null=True, blank=True)
@@ -103,7 +107,7 @@ def save_user_profile(sender, instance, created, **kwargs):
 @receiver(pre_save, sender=KioskOperatorProfile)
 def fetch_coordinates(sender, instance, **kwargs):
     if instance.kiosk_location:
-        geolocator = Nominatim(user_agent='kiosk_locator')
+        geolocator = GoogleV3(api_key=settings.GOOGLE_MAPS_API_KEY)
         try:
             location = geolocator.geocode(instance.kiosk_location)
             if location:

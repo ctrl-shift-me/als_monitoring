@@ -15,6 +15,7 @@ media/
 staticfiles/
 local_settings.py
 .env
+.env.local
 *.env
 
 # Migrations (optional, but useful if you regenerate them often)

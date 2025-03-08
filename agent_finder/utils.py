@@ -1,9 +1,11 @@
-from geopy.geocoders import Nominatim
+from django.conf import settings
+# from geopy.geocoders import Nominatim
+from geopy.geocoders import GoogleV3
 from geopy.distance import geodesic
 
 
 def geocode_address(address):
-    geolocator = Nominatim(user_agent="finder_app")
+    geolocator = GoogleV3(api_key=settings.GOOGLE_MAPS_API_KEY)
     try:
         location = geolocator.geocode(address)
         if location:
