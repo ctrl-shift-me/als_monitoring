@@ -66,6 +66,7 @@ class KioskOperatorProfile(models.Model):
     # Possibly have extra details about the shop
     # Optionally have provision for images
     kiosk_id = models.CharField(max_length=50)
+    # Should probably take in states too
     operating_hours = models.CharField(max_length=100)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
@@ -74,6 +75,10 @@ class KioskOperatorProfile(models.Model):
 
     def __str__(self):
         return f"Kiosk Operator Profile - {self.user.email}"
+
+    def get_full_name(self):
+        last_name = self.user.last_name if self.user.last_name != "N/A" else ""
+        return f"{self.user.first_name} {last_name}"
 
 
 class SuperAgentProfile(models.Model):
