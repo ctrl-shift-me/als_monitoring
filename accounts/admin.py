@@ -28,8 +28,13 @@ class CustomUserAdmin(UserAdmin):
 
 
 class KioskOperatorProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "kiosk_location", "latitude", "longitude")
+    list_display = ("user__first_name", "user__last_name", "state",
+                    "kiosk_location", "latitude", "longitude")
     readonly_fields = ("latitude", "longitude")
+    search_fields = ("user__first_name", "user__last_name",
+                     "state", "kiosk_location")
+    ordering = ("user__first_name", "user__last_name")
+    list_filter = ("state",)
 
 
 admin.site.register(User, CustomUserAdmin)

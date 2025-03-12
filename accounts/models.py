@@ -60,13 +60,55 @@ class User(AbstractUser):
 
 
 class KioskOperatorProfile(models.Model):
+
+    STATE_CHOICES = (
+        ('AB', 'Abia'),
+        ('FC', 'Abuja'),
+        ('AD', 'Adamawa'),
+        ('AK', 'Akwa Ibom'),
+        ('AN', 'Anambra'),
+        ('BA', 'Bauchi'),
+        ('BY', 'Bayelsa'),
+        ('BE', 'Benue'),
+        ('BO', 'Borno'),
+        ('CR', 'Cross River'),
+        ('DE', 'Delta'),
+        ('EB', 'Ebonyi'),
+        ('ED', 'Edo'),
+        ('EK', 'Ekiti'),
+        ('EN', 'Enugu'),
+        ('GO', 'Gombe'),
+        ('IM', 'Imo'),
+        ('JI', 'Jigawa'),
+        ('KD', 'Kaduna'),
+        ('KN', 'Kano'),
+        ('KT', 'Katsina'),
+        ('KE', 'Kebbi'),
+        ('KO', 'Kogi'),
+        ('KW', 'Kwara'),
+        ('LA', 'Lagos'),
+        ('NA', 'Nasarawa'),
+        ('NI', 'Niger'),
+        ('OG', 'Ogun'),
+        ('ON', 'Ondo'),
+        ('OS', 'Osun'),
+        ('OY', 'Oyo'),
+        ('PL', 'Plateau'),
+        ('RI', 'Rivers'),
+        ('SO', 'Sokoto'),
+        ('TA', 'Taraba'),
+        ('YO', 'Yobe'),
+        ('ZA', 'Zamfara'),
+    )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # Perhaps use Postgres text search to find places based on location stored
     kiosk_location = models.CharField(max_length=255)
     # Possibly have extra details about the shop
     # Optionally have provision for images
     kiosk_id = models.CharField(max_length=50)
-    # Should probably take in states too
+    # Should probably take in states too but as an enum
+    state = models.CharField(max_length=2, choices=STATE_CHOICES)
     operating_hours = models.CharField(max_length=100)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)

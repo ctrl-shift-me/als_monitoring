@@ -51,6 +51,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ item.operator.get_full_name }}</h5>
                                 <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.kiosk_location }}</p>
+                                <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.get_state_display }} State</p>
                                 <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.operating_hours }}</p>
                                 <p class="text-muted"><i class="bi bi-telephone-fill"></i> {{ item.operator.phone_number }}</p>
                                 <p><strong>Distance:</strong> {{ item.distance|floatformat:1 }} km away</p>
