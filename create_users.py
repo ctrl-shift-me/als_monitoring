@@ -9,12 +9,13 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "als_monitoring.settings")
 django.setup()
 
 from django.contrib.auth import get_user_model
-from accounts.models import KioskOperatorProfile
+from accounts.models import KioskOperatorProfile, SuperAgentProfile, User
 
 
 User = get_user_model()
 
 CSV_FILE_PATH = "tracklist.csv"
+CSV_FILE_PATH_2 = "super_agent_info.csv"
 
 
 # def generate_kiosk_id():
@@ -85,4 +86,68 @@ def create_users_from_csv(csv_file):
                 f"✅ Profile set up for: {email} | Kiosk ID: {profile.kiosk_id}")
 
 
-create_users_from_csv(CSV_FILE_PATH)
+def create_super_agents_from_csv(csv_file):
+    with open(csv_file, newline='', encoding='utf-8') as file:
+        # No state mapping right now
+        state_mapping = {name: code for code, name in KioskOperatorProfile.STATE_CHOICES}
+        
+        reader = csv.DictReader(file)
+        
+        for row in reader:
+            email = row["Email"].strip()
+            full_name = row["Name"].strip()
+            # To get the short form representation
+            state = state_mapping.get(row["State"].strip())
+            # location = row["Location"].strip()
+            phone_no = f"0{row["Phone Number"].strip()}"
+            # kiosk_id = row["Serial Number"].strip()
+            kiosk_id = "N/A"
+            
+            # Extract first and name (first and second words in full name)
+            first_name = full_name.split()[0]
+            last_name = full_name.split()[1] if len(
+                full_name.split()) > 1 else "N/A"
+
+            # Generate password (e.g., Philip_Zamfara)
+            password = f"{first_name}_{state}"
+            
+
+            # Create user if not exists
+            user, created = User.objects.get_or_create(
+                email=email,
+                defaults={
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "user_type": User.UserType.SUPER_AGENT
+                }
+            )
+            
+            if created:
+                user.set_password(password)
+                user.save()
+                print(f"Created user: {email}")
+            else:
+                print(f"User already exists: {email}")
+                
+            # Create or update the super agent profile
+            profile, profile_created = SuperAgentProfile.objects.get_or_create(user=user, defaults={
+                "region": state,
+                "number_of_kiosks_managed": 0,
+                "phone_number": phone_no,
+                "state": state
+            })
+            
+            if not profile_created:
+                profile.region = state
+                profile.number_of_kiosks_managed = 0
+                profile.phone_number = phone_no
+                profile.state = state
+                profile.save()
+                
+            print(
+                f"✅ Profile set up for super agent: {email}")
+
+
+
+# create_users_from_csv(CSV_FILE_PATH)
+create_super_agents_from_csv(CSV_FILE_PATH_2)

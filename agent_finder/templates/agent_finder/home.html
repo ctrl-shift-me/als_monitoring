@@ -4,8 +4,8 @@
 <div class="container mt-5">
     <div class="row mb-5">
         <div class="col-md-8 offset-md-2 text-center">
-            <h1 class="display-4">Find Kiosk Operators Near You</h1>
-            <p class="lead">Looking for Afro Lottery Systems Kiosks in your area? We'll help you find the closest ones.</p>
+            <h1 class="display-4">Find Kiosk Operators and Super Agents Near You</h1>
+            <p class="lead">Looking for Afro Lottery Systems Kiosks or Super Agents in your area? We'll help you find the closest ones.</p>
         </div>
     </div>
     
@@ -19,6 +19,14 @@
                             <div class="col-md-5">
                                 <label for="location" class="form-label">Your Location</label>
                                 <input type="text" id="location" name="search_location" class="form-control" placeholder="Enter your address, city, or zip code" required value="{{ search_location }}">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="user_type" class="form-label">Looking For</label>
+                                <select id="user_type" name="user_type" class="form-select">
+                                    <option value="all" {% if user_type == 'all' %}selected{% endif %}>All</option>
+                                    <option value="KO" {% if user_type == 'KO' %}selected{% endif %}>Kiosk Operators</option>
+                                    <option value="SA" {% if user_type == 'SA' %}selected{% endif %}>Super Agents</option>
+                                </select>
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary w-100">Search</button>
@@ -40,7 +48,15 @@
     <div class="row">
         <div class="col-md-10 offset-md-1">
             <h2>
-                Kiosk Operators Near "{{ search_location }}"
+                {% comment %} Kiosk Operators Near "{{ search_location }}" {% endcomment %}
+                {% if user_type == 'KO' %}
+                    Kiosk Operators
+                {% elif user_type == 'SA' %}
+                    Super Agents
+                {% else %}
+                    Kiosk Operators and Super Agents
+                {% endif %}
+                Near "{{ search_location }}"
             </h2>
             
             {% if closest_operators %}
@@ -50,6 +66,11 @@
                         <div class="card shadow h-100">
                             <div class="card-body">
                                 <h5 class="card-title">{{ item.operator.get_full_name }}</h5>
+                                <p class="text-muted">
+                                    <span class="badge {% if item.operator.user.user_type == 'KO' %}bg-primary{% else %}bg-success{% endif %}">
+                                        {{ item.operator.user.get_user_type_display }}
+                                    </span>
+                                </p>
                                 <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.kiosk_location }}</p>
                                 <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.get_state_display }} State</p>
                                 <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.operating_hours }}</p>

@@ -127,11 +127,18 @@ class SuperAgentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     region = models.CharField(max_length=100)
     number_of_kiosks_managed = models.IntegerField(default=0)
+    # Should probably take in states too but as an enum
+    state = models.CharField(
+        max_length=2, choices=KioskOperatorProfile.STATE_CHOICES)
     # Todo: Add kiosks managed
     phone_number = models.CharField(max_length=15)
 
     def __str__(self):
         return f"Super Agent Profile - {self.user.email}"
+
+    def get_full_name(self):
+        last_name = self.user.last_name if self.user.last_name != "N/A" else ""
+        return f"{self.user.first_name} {last_name}"
 
 
 @receiver(post_save, sender=User)
