@@ -13,7 +13,7 @@
         <div class="col-md-8">
             <div class="card shadow">
                 <div class="card-body p-4">
-                    <form method="post">
+                    <form method="post" id="location-search-form">
                         {% csrf_token %}
                         <div class="row g-3">
                             <div class="col-md-5">
@@ -115,7 +115,46 @@ document.addEventListener("DOMContentLoaded", function () {
     const detectBtn = document.getElementById("detect-location");
     const form = document.getElementById("location-search-form");
 
-    function setLocationFromGeolocation() {
+    let userLat = null;
+    let userLng = null;
+
+    function enableDirectionButtons() {
+        document.querySelectorAll('.get-directions').forEach(button => {
+            button.addEventListener('click', () => {
+                if (userLat !== null && userLng !== null) {
+                    const destLat = button.getAttribute('data-dest-lat');
+                    const destLng = button.getAttribute('data-dest-lng');
+                    const url = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destLat},${destLng}`;
+                    window.open(url, '_blank');
+                } else {
+                    alert("User location not available yet.");
+                }
+            });
+        });
+    }
+
+    function geocodeAddress(address, onSuccess) {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    userLat = parseFloat(data[0].lat);
+                    userLng = parseFloat(data[0].lon);
+                    if (typeof onSuccess === 'function') {
+                        onSuccess();
+                    }
+                } else {
+                    alert("Could not find location.");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Failed to geocode address.");
+            });
+    }
+
+    function setLocationFromGeolocation(onSuccess) {
         if (!navigator.geolocation) {
             alert("Geolocation is not supported by your browser.");
             return;
@@ -126,39 +165,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         navigator.geolocation.getCurrentPosition(
             async (position) => {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
 
                 try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`);
                     const data = await response.json();
                     if (data && data.display_name) {
                         locationInput.value = data.display_name;
-                        detectBtn.innerHTML = '<i class="bi bi-geo-alt-fill"></i>';
-                        // Optionally submit the form automatically:
-                        // form.submit();
-                    } else {
-                        alert("Could not detect location details.");
                     }
-
-                    document.querySelectorAll('.get-directions').forEach(button => {
-                        button.addEventListener('click', () => {
-                            const destLat = button.getAttribute('data-dest-lat');
-                            const destLng = button.getAttribute('data-dest-lng');
-                            const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=${destLat},${destLng}`;
-                            window.open(url, '_blank');
-                        });
-                    });
                 } catch (error) {
                     console.error(error);
-                    alert("Error fetching location details.");
                 } finally {
                     detectBtn.disabled = false;
                     detectBtn.innerHTML = '<i class="bi bi-geo-alt"></i>';
+                    if (typeof onSuccess === "function") {
+                        onSuccess();
+                    }
                 }
             },
-            (error) => {
-                console.log(error)
+            () => {
                 alert("Unable to retrieve your location.");
                 detectBtn.disabled = false;
                 detectBtn.innerHTML = '<i class="bi bi-geo-alt"></i>';
@@ -166,15 +192,27 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-    // Auto-detect on page load
+    // On page load
     if (!locationInput.value) {
-        setLocationFromGeolocation();
+        setLocationFromGeolocation(enableDirectionButtons);
+    } else {
+        // If location was entered manually previously, geocode it
+        geocodeAddress(locationInput.value, enableDirectionButtons);
     }
 
-    // Detect on button click
     detectBtn.addEventListener("click", function (e) {
-        e.preventDefault();  // Prevent form submission
-        setLocationFromGeolocation();
+        e.preventDefault();
+        setLocationFromGeolocation(enableDirectionButtons);
+    });
+
+    // 🧠 Geocode the manually entered location before form submission
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();  // Stop form for now
+
+        const typedLocation = locationInput.value;
+        geocodeAddress(typedLocation, function () {
+            form.submit();  // Now submit with updated coordinates
+        });
     });
 });
 </script>
