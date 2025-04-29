@@ -28,7 +28,7 @@
                             <div class="col-md-3">
                                 <label for="user_type" class="form-label">Looking For</label>
                                 <select id="user_type" name="user_type" class="form-select">
-                                    <option value="all" {% if user_type == 'all' %}selected{% endif %}>All</option>
+                                    {% comment %} <option value="all" {% if user_type == 'all' %}selected{% endif %}>All</option> {% endcomment %}
                                     <option value="KO" {% if user_type == 'KO' %}selected{% endif %}>Kiosk Operators</option>
                                     <option value="SA" {% if user_type == 'SA' %}selected{% endif %}>Super Agents</option>
                                 </select>
@@ -76,10 +76,11 @@
                                         {{ item.operator.user.get_user_type_display }}
                                     </span>
                                 </p>
-                                <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.kiosk_location }}</p>
-                                <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.get_state_display }} State</p>
-                                <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.operating_hours }}</p>
-                                <p class="text-muted"><i class="bi bi-telephone-fill"></i> {{ item.operator.phone_number }}</p>
+                                <p class="text-muted">
+                                    {{ item.operator.kiosk_location }}</p>
+                                <p class="text-muted"> {{ item.operator.get_state_display }} State</p>
+                                <p class="text-muted"> {{ item.operator.operating_hours }}</p>
+                                <p class="text-muted"></i> {{ item.operator.phone_number }}</p>
                                 <p><strong>Distance:</strong> {{ item.distance|floatformat:1 }} km away</p>
 
                                 {% comment %} Button for getting directions {% endcomment %}

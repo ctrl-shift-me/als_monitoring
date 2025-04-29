@@ -22,7 +22,7 @@ def home(request):
             # Get profiles based on the user_type filter
             # providers_query = KioskOperatorProfile.objects.filter(
             #     is_available=True)
-            if user_type == "KO" or user_type == "all":
+            if user_type == "KO":
                 kiosk_operators = KioskOperatorProfile.objects.filter(
                     is_available=True
                 ).exclude(
@@ -45,7 +45,7 @@ def home(request):
                             'type': 'KO'
                         })
 
-            if user_type == "SA" or user_type == "all":
+            if user_type == "SA":
                 # super_agents = SuperAgentProfile.objects.exclude(
                 #     latitude__isnull=True
                 # ).exclude(
