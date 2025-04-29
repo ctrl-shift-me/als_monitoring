@@ -18,7 +18,12 @@
                         <div class="row g-3">
                             <div class="col-md-5">
                                 <label for="location" class="form-label">Your Location</label>
-                                <input type="text" id="location" name="search_location" class="form-control" placeholder="Enter your address, city, or zip code" required value="{{ search_location }}">
+                                 <div class="input-group">
+                                    <input type="text" id="location" name="search_location" class="form-control" placeholder="Enter your address, city, or zip code" required value="{{ search_location }}">
+                                    <button type="button" class="btn btn-secondary" id="detect-location" title="Detect my location">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="col-md-3">
                                 <label for="user_type" class="form-label">Looking For</label>
@@ -76,6 +81,15 @@
                                 <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ item.operator.operating_hours }}</p>
                                 <p class="text-muted"><i class="bi bi-telephone-fill"></i> {{ item.operator.phone_number }}</p>
                                 <p><strong>Distance:</strong> {{ item.distance|floatformat:1 }} km away</p>
+
+                                {% comment %} Button for getting directions {% endcomment %}
+                                 <button
+                                    class="btn btn-outline-primary mt-2 get-directions"
+                                    data-dest-lat="{{ item.operator.latitude }}"
+                                    data-dest-lng="{{ item.operator.longitude }}"
+                                >
+                                    Get Directions
+                                </button>
                             </div>
                             {% comment %} <div class="card-footer bg-white">
                                 <a href="#" class="btn btn-primary">Contact Kiosk Operator</a>
@@ -94,4 +108,75 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const locationInput = document.getElementById("location");
+    const detectBtn = document.getElementById("detect-location");
+    const form = document.getElementById("location-search-form");
+
+    function setLocationFromGeolocation() {
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser.");
+            return;
+        }
+
+        detectBtn.disabled = true;
+        detectBtn.innerHTML = '<i class="bi bi-geo-alt-fill"></i> Detecting...';
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+                    const data = await response.json();
+                    if (data && data.display_name) {
+                        locationInput.value = data.display_name;
+                        detectBtn.innerHTML = '<i class="bi bi-geo-alt-fill"></i>';
+                        // Optionally submit the form automatically:
+                        // form.submit();
+                    } else {
+                        alert("Could not detect location details.");
+                    }
+
+                    document.querySelectorAll('.get-directions').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const destLat = button.getAttribute('data-dest-lat');
+                            const destLng = button.getAttribute('data-dest-lng');
+                            const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=${destLat},${destLng}`;
+                            window.open(url, '_blank');
+                        });
+                    });
+                } catch (error) {
+                    console.error(error);
+                    alert("Error fetching location details.");
+                } finally {
+                    detectBtn.disabled = false;
+                    detectBtn.innerHTML = '<i class="bi bi-geo-alt"></i>';
+                }
+            },
+            (error) => {
+                console.log(error)
+                alert("Unable to retrieve your location.");
+                detectBtn.disabled = false;
+                detectBtn.innerHTML = '<i class="bi bi-geo-alt"></i>';
+            }
+        );
+    }
+
+    // Auto-detect on page load
+    if (!locationInput.value) {
+        setLocationFromGeolocation();
+    }
+
+    // Detect on button click
+    detectBtn.addEventListener("click", function (e) {
+        e.preventDefault();  // Prevent form submission
+        setLocationFromGeolocation();
+    });
+});
+</script>
+
 {% endblock %}
