@@ -149,5 +149,5 @@ def create_super_agents_from_csv(csv_file):
 
 
 
-# create_users_from_csv(CSV_FILE_PATH)
-create_super_agents_from_csv(CSV_FILE_PATH_2)
+create_users_from_csv(CSV_FILE_PATH)
+# create_super_agents_from_csv(CSV_FILE_PATH_2)
