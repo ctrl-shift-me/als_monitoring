@@ -72,15 +72,14 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ item.operator.get_full_name }}</h5>
                                 <p class="text-muted">
-                                    <span class="badge {% if item.operator.user.user_type == 'KO' %}bg-primary{% else %}bg-success{% endif %}">
+                                    <span class="badge bg-primary">
                                         {{ item.operator.user.get_user_type_display }}
                                     </span>
                                 </p>
-                                <p class="text-muted">
-                                    {{ item.operator.kiosk_location }}</p>
-                                <p class="text-muted"> {{ item.operator.get_state_display }} State</p>
-                                <p class="text-muted"> {{ item.operator.operating_hours }}</p>
-                                <p class="text-muted"></i> {{ item.operator.phone_number }}</p>
+                                <p>{{ item.operator.kiosk_location }}</p>
+                                <p> {{ item.operator.get_state_display }} State</p>
+                                <p> {{ item.operator.operating_hours }}</p>
+                                <p></i> {{ item.operator.phone_number }}</p>
                                 <p><strong>Distance:</strong> {{ item.distance|floatformat:1 }} km away</p>
 
                                 {% comment %} Button for getting directions {% endcomment %}

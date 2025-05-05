@@ -1,0 +1,214 @@
+/* Custom styles to match the styleguide */
+
+/* Font face declarations */
+@font-face {
+  font-family: 'TypeFace Now';
+  src: url("../fonts/Now-Regular.otf") format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TypeFace Now';
+  src: url("../fonts/Now-Bold.otf") format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TypeFace Now';
+  src: url("../fonts/Now-ExtraBold.otf") format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TypeFace Now';
+  src: url("../fonts/Now-ExtraLight.otf") format('opentype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TypeFace Now';
+  src: url("../fonts/Now-Light.otf") format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TypeFace Now';
+  src: url("../fonts/Now-Black.otf") format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TypeFace Now';
+  src: url("../fonts/Now-Medium.otf") format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TypeFace Now';
+  src: url("../fonts/Now-SemiBold.otf") format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TypeFace Now';
+  src: url("../fonts/Now-Thin.otf") format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --primary-bg: #0F0F0F;
+  --primary-accent: #ED2024;
+  --secondary-dark: #3B3E40;
+  --secondary-light: #E7E9E6;
+  --white: #FFFFFF;
+}
+
+body {
+  font-family: 'TypeFace Now', sans-serif;
+  font-size: 1.125rem; /* Because typeface now is small*/
+  background-color: var(--primary-bg);
+  color: var(--secondary-light);
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: var(--primary-bg) !important;
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+  color: var(--white) !important;
+}
+
+/* Heading styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--white);
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: var(--primary-accent) !important;
+  border-color: var(--primary-accent) !important;
+  color: var(--white) !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #d41c20 !important; /* Slightly darker shade for hover */
+  border-color: #d41c20 !important;
+}
+
+.btn-outline-primary {
+  color: var(--primary-accent) !important;
+  border-color: var(--primary-accent) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-accent) !important;
+  color: var(--white) !important;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-dark) !important;
+  border-color: var(--secondary-dark) !important;
+}
+
+/* Card styling */
+.card {
+  border: none;
+  background-color: var(--secondary-dark);
+  color: var(--secondary-light);
+}
+
+.card-title {
+  color: var(--white);
+}
+
+/* Badge styling */
+.bg-primary {
+  background-color: var(--primary-accent) !important;
+}
+
+.bg-success {
+  background-color: var(--secondary-dark) !important;
+}
+
+/* Form elements */
+.form-control {
+  background-color: var(--secondary-dark);
+  /* border-color: var(--secondary-dark); */
+  color: var(--white);
+}
+
+.form-control::placeholder {
+  color: var(--secondary-light);
+  opacity: 0.7;
+}
+
+.form-control:focus {
+  background-color: var(--secondary-dark);
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 0.25rem rgba(237, 32, 36, 0.25);
+  color: var(--white);
+}
+
+.form-select {
+  background-color: var(--secondary-dark);
+  /* border-color: var(--secondary-dark); */
+  color: var(--white);
+}
+
+label.form-label {
+  color: var(--secondary-light);
+}
+
+/* Custom container styling */
+.container .display-4 {
+  color: var(--white);
+}
+
+.container .lead {
+  color: var(--secondary-light);
+}
+
+/* Card shadow */
+.shadow {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Alert styling */
+.alert-danger {
+  background-color: rgba(237, 32, 36, 0.1);
+  border-color: var(--primary-accent);
+  color: var(--primary-accent);
+}
+
+.alert-info {
+  background-color: rgba(59, 62, 64, 0.1);
+  border-color: var(--secondary-dark);
+  color: var(--secondary-dark);
+}
+
+#detect-location {
+  border-color: white !important; /* White border for the button */
+}
+
+#detect-location i {
+  color: #d41c20 !important; /* Changes the icon color to red */
+}
