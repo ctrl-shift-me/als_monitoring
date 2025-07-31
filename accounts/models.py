@@ -126,7 +126,6 @@ class KioskOperatorProfile(models.Model):
 class SuperAgentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     region = models.CharField(max_length=100)
-    number_of_kiosks_managed = models.IntegerField(default=0)
     # Should probably take in states too but as an enum
     state = models.CharField(
         max_length=2, choices=KioskOperatorProfile.STATE_CHOICES)
