@@ -22,7 +22,7 @@ def home(request):
             # Get profiles based on the user_type filter
             # providers_query = KioskOperatorProfile.objects.filter(
             #     is_available=True)
-            if user_type == "KO":
+            if user_type == "KO" or user_type == "BS":
                 kiosk_operators = KioskOperatorProfile.objects.filter(
                     is_available=True
                 ).exclude(
@@ -79,7 +79,7 @@ def home(request):
             # Limit to 10 closest providers
             # optionally take in a variable to show n closest operators
             # closest_operators = kiosk_operators[:5]
-            closest_operators = results[:5]
+            closest_operators = results[:10]
 
             context['search_provided'] = True
             context['search_location'] = search_location

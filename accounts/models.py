@@ -39,6 +39,7 @@ class User(AbstractUser):
     class UserType(models.TextChoices):
         KIOSK_OPERATOR = 'KO', 'Kiosk Operator'
         SUPER_AGENT = 'SA', 'Super Agent'
+        ALS_BET_SHOP = 'BS', 'ALSBets Shop'
 
     username = None
     email = models.EmailField(

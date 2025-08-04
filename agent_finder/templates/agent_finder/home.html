@@ -4,11 +4,11 @@
 <div class="container mt-5">
     <div class="row mb-5">
         <div class="col-md-8 offset-md-2 text-center">
-            <h1 class="display-4">Find Kiosk Operators and Super Agents Near You</h1>
+            <h1 class="display-4">Find Kiosk Operators, ALS Bets Shops, and Super Agents Near You</h1>
             <p class="lead">Looking for Afro Lottery Systems Kiosks or Super Agents in your area? We'll help you find the closest ones.</p>
         </div>
     </div>
-    
+
     <div class="row justify-content-center mb-5">
         <div class="col-md-8">
             <div class="card shadow">
@@ -31,6 +31,7 @@
                                     {% comment %} <option value="all" {% if user_type == 'all' %}selected{% endif %}>All</option> {% endcomment %}
                                     <option value="KO" {% if user_type == 'KO' %}selected{% endif %}>Kiosk Operators</option>
                                     <option value="SA" {% if user_type == 'SA' %}selected{% endif %}>Super Agents</option>
+                                    <option value="BS" {% if user_type == 'BS' %}selected{% endif %}>ALSBets Shops</option>
                                 </select>
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
@@ -40,7 +41,7 @@
                     </form>
                 </div>
             </div>
-            
+
             {% if geocoding_error %}
             <div class="alert alert-danger mt-3">
                 <i class="bi bi-exclamation-triangle-fill"></i> We couldn't find that location. Please try entering a different address or zip code.
@@ -48,7 +49,7 @@
             {% endif %}
         </div>
     </div>
-    
+
     {% if search_provided %}
     <div class="row">
         <div class="col-md-10 offset-md-1">
@@ -58,12 +59,14 @@
                     Kiosk Operators
                 {% elif user_type == 'SA' %}
                     Super Agents
+                {% elif user_type == 'BS' %}
+                    ALSBets Shops
                 {% else %}
-                    Kiosk Operators and Super Agents
+                    Kiosk Operators, ALSBets Shops, and Super Agents
                 {% endif %}
                 Near "{{ search_location }}"
             </h2>
-            
+
             {% if closest_operators %}
                 <div class="row mt-4">
                     {% for item in closest_operators %}
